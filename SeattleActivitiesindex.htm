@@ -1,0 +1,167 @@
+<html>
+<!--
+ /**
+ * index.htm is a demo file to  work with a sample API file to be called via AJAX to 
+ * deliver the contents of 2 JSON files, one of which orders the 
+ * data by year, the other by Box Office results.
+ *
+ * The api page can be called via AJAX either via GET or POST, using a variable 
+ * named "cat":
+ *
+ * <code>
+ * api.php?cat=box
+ * </code>
+ *
+ * In the example above, the parameter cat is loaded with the string "indoorOutdoor" 
+ * which will indicate to the API to load the JSON file containing 
+ * indoor activity results.
+ *
+ * For troubleshooting, swap out the bondJSON() function with toConsole() 
+ * to examine the raw data returned
+ *
+ * @package seattleactivities-web-service
+ * @author Patrice Briggs
+ * @version 1.01 2015/02/24
+ * @link https://github.com/
+ * @license 
+ * @see api.php
+ * @todo none
+ */
+-->
+<head>
+<title>Seattle Area Activities Demo</title>
+<style>
+body {font-family:calibri;}
+#activities {
+	max-width:800px;
+	margin:5px;
+	padding:2px;
+}
+#activities > div {
+	padding:5px;
+	min-height:40px;
+	margin-bottom:5px;
+	border:2px solid #4E9258;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	position:relative; /* required to place #pic to right */
+}
+
+#activities h3 {
+	font-family:calibri;
+	padding:5px;
+	color:#fff;
+	background:#4E9258;
+	margin:0;
+}
+
+#pic{
+	position:absolute;
+	right:10px;
+	top:10px;
+}
+</style>
+<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {  
+
+	$('.category').click(function(e){
+        e.preventDefault(); //stop default action of the link
+		cat = $(this).attr("href");  //get category from URL
+		//console.log("Category selected", cat);
+		loadAJAX(cat);  //load AJAX and parse JSON file
+	});
+});	
+/*
+$(document).ready(function() {  
+	$('#activity_form').submit(function(e){
+		var sort_order = $('input[name=activity_sort]:checked').val();
+		//loadAJAX(sort_order);  //load AJAX and parse JSON file
+		e.preventDefault();  //no form submission necessary, as we're using AJAX
+	});
+});	
+*/
+function loadAJAX(cat)
+{
+	$.ajax({  
+		type: "GET",
+		dataType: "json",  
+		url: "api.php?cat=" + cat,
+		success: activityJSON,   //change out activityJSON/toConsole
+	});
+
+	$('#activities').html('');//clear data
+}
+
+function toConsole(data)
+{//return data to console for JSON examination
+	console.log(data); //to view,use Chrome console, ctrl + shift + j
+}
+
+function activityJSON(data){
+	//$('#output').text(JSON.stringify(data));  //uncomment to view raw output
+
+/*
+	var actor_checkboxes = $('input[name=bond_actor]:checked');
+	var actors = [];
+	$(actor_checkboxes).each(function(){
+		actors.push(this.value); //add to an array of actors
+	});
+
+	//var header = data.title;
+	//$('#filmtitle').html(header);
+	
+	if(actors != "")
+	{
+		actors = "Actors: " + actors.join(', ');  //join builds comma separated string from array
+		$('<h4></h4>').html(actors).appendTo('#filmtitle');
+	}else{
+		$('<h4></h4>').html('No actors selected').appendTo('#filmtitle');
+	}
+*/
+
+
+	var header = data.title;
+	$('#activityName').html(header);
+	$.each(data.activities, function(i,item){
+		
+		var text = '<b>Activity</b>: ' + item.Activity + '<br />';
+		text += '<b>Location </b>: ' + item.Location + '<br />';
+		text += '<b>Description</b>: ' + item.Description + '<br />';
+		text += '<b>Indoors/Outdoors</b>: ' + item.IndoorsOutdoors + '<br />';
+		text += '<b>Cost</b>: ' + item.Cost + '<br />';
+		text += "<b>Website</b>: <a href='" + item.Website + "' target=_blank>" + item.Website + " </a><br />";
+		text += '<b>Address</b>: ' + item.Address + '<br />';
+		text += '<b>Phone</b>: ' + item.Phone + '<br />';
+		text += '<div id="pic"><img src="thumbnails/' + item.Image + '" /></div>';
+		$('<div></div>').html(text).appendTo('#activities');  
+
+	});
+}
+
+</script>
+</head>
+	<body>
+
+<h1>Seattle Activities Web Service Demo</h1>
+		<a href="indoorOutdoor" class="category">Activities by Indoors/Outdoors</a><br />
+		<a href="location" class="category">Activities by Location</a>
+		<h3 id="activityName">Activity Title Will Go Here</h3>
+		<div id="activities">
+			<p>Activity details will go here</p>
+		</div>
+		<div id="output">Results of JSON.stringify go here</div>
+
+<!--
+	<form id="activity_form">
+	<div id="activity_sort">
+		<h3>Sort Order</h3>
+		<p>Please choose the sort order of the Activities returned</p>
+		<input type="radio" name="activity_sort" value="indoorOutdoor">Sorted by Indoor/Outdoor <br />
+		<input type="radio" name="activity_sort" value="location">Sorted by Location<br />
+	</div>
+-->
+	</body>
+</html>
