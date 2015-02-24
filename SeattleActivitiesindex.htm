@@ -103,26 +103,6 @@ function toConsole(data)
 function activityJSON(data){
 	//$('#output').text(JSON.stringify(data));  //uncomment to view raw output
 
-/*
-	var actor_checkboxes = $('input[name=bond_actor]:checked');
-	var actors = [];
-	$(actor_checkboxes).each(function(){
-		actors.push(this.value); //add to an array of actors
-	});
-
-	//var header = data.title;
-	//$('#filmtitle').html(header);
-	
-	if(actors != "")
-	{
-		actors = "Actors: " + actors.join(', ');  //join builds comma separated string from array
-		$('<h4></h4>').html(actors).appendTo('#filmtitle');
-	}else{
-		$('<h4></h4>').html('No actors selected').appendTo('#filmtitle');
-	}
-*/
-
-
 	var header = data.title;
 	$('#activityName').html(header);
 	$.each(data.activities, function(i,item){
