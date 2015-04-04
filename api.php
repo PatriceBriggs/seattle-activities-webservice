@@ -8,12 +8,12 @@
  * named "cat":
  *
  * <code>
- * api.php?cat=box
+ * api.php?cat=indoorOutoodr
  * </code>
  *
- * In the example above, the parameter cat is loaded with the string "box" 
+ * In the example above, the parameter cat is loaded with the string "indoorOutdoor" 
  * which will indicate to the API to load the JSON file containing 
- * box office results.
+ * Indoor/Outoor results.
  *
  * @package seattleactivities-web-service
  * @author Patrice Briggs
